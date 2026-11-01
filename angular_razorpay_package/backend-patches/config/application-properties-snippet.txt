@@ -1,0 +1,8 @@
+# Browser links sent in WhatsApp must point to the Angular app's public URL.
+# Example for local testing through Cloudflare Quick Tunnel:
+app.frontend-base-url=${APP_FRONTEND_BASE_URL:http://localhost:4200}
+
+# Keep these Razorpay settings on the Spring Boot backend only.
+razorpay.key.id=${RAZORPAY_KEY_ID}
+razorpay.key.secret=${RAZORPAY_KEY_SECRET}
+razorpay.webhook.secret=${RAZORPAY_WEBHOOK_SECRET:}

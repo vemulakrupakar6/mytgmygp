@@ -1,0 +1,71 @@
+<main class="page-shell">
+  <header class="brand-row">
+    <div class="brand-mark">TG</div>
+    <div><div class="brand-name">MY TG / MY GP</div><div class="brand-subtitle">Citizen Services · Secure Payment</div></div>
+    <span class="secure-label">Secure checkout</span>
+  </header>
+
+  <section class="card">
+    <div class="page-heading"><div><p class="eyebrow">PANCHAYAT PROPERTY TAX</p><h1>{{ isPaid ? 'Payment receipt' : 'Review your tax details' }}</h1><p class="intro">Verify the property and tax breakdown before continuing.</p></div><div class="status-icon" [class.success-icon]="isPaid">{{ isPaid ? '✓' : '₹' }}</div></div>
+
+    <div class="notice" [class.notice-error]="error" [class.notice-success]="isPaid" *ngIf="message || loading">{{ loading ? 'Loading property details securely…' : message }}</div>
+
+    <ng-container *ngIf="details as d">
+      <section class="section-block">
+        <h2>Property details</h2>
+        <div class="detail-grid">
+          <div class="detail"><span>Property owner</span><strong>{{ assessment?.owner || 'Not provided' }}</strong></div>
+          <div class="detail"><span>Assessment number</span><strong>{{ assessment?.assessmentNo || '—' }}</strong></div>
+          <div class="detail"><span>PTIN</span><strong>{{ assessment?.ptin || '—' }}</strong></div>
+          <div class="detail"><span>House number</span><strong>{{ assessment?.houseNo || '—' }}</strong></div>
+          <div class="detail"><span>Father / Husband name</span><strong>{{ assessment?.fatherHusbandName || '—' }}</strong></div>
+          <div class="detail"><span>Building usage</span><strong>{{ assessment?.buildingUsage || '—' }}</strong></div>
+          <div class="detail"><span>Building classification</span><strong>{{ assessment?.buildingClassification || '—' }}</strong></div>
+          <div class="detail"><span>Assessment date</span><strong>{{ assessment?.dtOfAsmt || '—' }}</strong></div>
+          <div class="detail"><span>Exemption</span><strong>{{ assessment?.exemption || '—' }}</strong></div>
+          <div class="detail"><span>Court case</span><strong>{{ assessment?.courtCase || '—' }}</strong></div>
+          <div class="detail"><span>District</span><strong>{{ d.districtName || '—' }}</strong></div>
+          <div class="detail"><span>Mandal</span><strong>{{ d.mandalName || '—' }}</strong></div>
+          <div class="detail"><span>Gram Panchayat</span><strong>{{ d.gramPanchayatName || '—' }}</strong></div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <h2>Current demand</h2>
+        <div class="period-row"><span>Tax period</span><strong>{{ currentDemand?.periodFrom || '—' }} to {{ currentDemand?.periodTo || '—' }}</strong></div>
+        <div class="tax-row" *ngFor="let row of taxRows(currentDemand)"><span>{{ row.label }}</span><strong>{{ money(row.value) }}</strong></div>
+        <div class="tax-row subtotal"><span>Current demand total</span><strong>{{ money(currentDemand?.totalAmount) }}</strong></div>
+      </section>
+
+      <section class="section-block">
+        <h2>Arrears</h2>
+        <ng-container *ngIf="arrears; else noArrears">
+          <div class="period-row" *ngIf="arrears.periodFrom || arrears.periodTo"><span>Arrear period</span><strong>{{ arrears.periodFrom || '—' }} to {{ arrears.periodTo || '—' }}</strong></div>
+          <div class="tax-row" *ngFor="let row of taxRows(arrears)"><span>{{ row.label }}</span><strong>{{ money(row.value) }}</strong></div>
+          <div class="tax-row subtotal"><span>Arrears total</span><strong>{{ money(arrears.totalAmount) }}</strong></div>
+        </ng-container>
+        <ng-template #noArrears><div class="no-arrears">No arrears recorded <strong>{{ money(0) }}</strong></div></ng-template>
+      </section>
+
+      <section class="total-panel"><span>Total payable</span><strong>{{ money(d.totalPayable) }}</strong></section>
+
+      <section class="receipt-panel" *ngIf="isPaid">
+        <div class="receipt-success">Payment successfully completed</div>
+        <div class="detail-grid receipt-grid">
+          <div class="detail"><span>Receipt number</span><strong>{{ data?.receiptNumber || '—' }}</strong></div>
+          <div class="detail"><span>Payment reference</span><strong>{{ data?.paymentId || '—' }}</strong></div>
+          <div class="detail"><span>Amount paid</span><strong>{{ money((data?.amountPaise || 0) / 100) }}</strong></div>
+          <div class="detail"><span>Paid at</span><strong>{{ data?.paidAt ? (data?.paidAt | date:'medium') : '—' }}</strong></div>
+        </div>
+        <button class="secondary-button" type="button" (click)="printReceipt()">Print / Save receipt</button>
+      </section>
+
+      <button class="pay-button" type="button" *ngIf="!isPaid && !isExpired" [disabled]="loading || paying" (click)="completePayment()">
+        <span *ngIf="!paying">Complete Payment · {{ money(d.totalPayable) }}</span><span *ngIf="paying">Processing…</span>
+      </button>
+      <p class="fine-print" *ngIf="!isPaid">Your payment is confirmed only after verification by the payment server. Do not share this secure link with others.</p>
+    </ng-container>
+    <div class="loading-block" *ngIf="loading"><span class="spinner"></span> Retrieving your property details…</div>
+  </section>
+  <footer>MY TG / MY GP · Keep your receipt for future reference.</footer>
+</main>

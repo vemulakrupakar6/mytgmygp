@@ -1,0 +1,11 @@
+Change only the @Value field in your existing RazorpayHouseTaxPaymentService.java.
+
+OLD:
+@Value("${app.public-base-url}")
+private String publicBaseUrl;
+
+NEW:
+@Value("${app.frontend-base-url:${app.public-base-url}}")
+private String publicBaseUrl;
+
+Keep the existing cleanBaseUrl() method and all payment verification logic. This makes WhatsApp payment and receipt links point to Angular while retaining app.public-base-url as a fallback.

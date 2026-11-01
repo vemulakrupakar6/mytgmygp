@@ -1,0 +1,10 @@
+Merge these matchers into your EXISTING SecurityFilterChain, before any catch-all authenticated matcher.
+
+.requestMatchers(
+    "/api/v1/payments/house-tax/**",
+    "/api/v1/payments/receipt/**",
+    "/api/v1/payments/razorpay/webhook",
+    "/api/v1/whatsapp/webhook"
+).permitAll()
+
+Do not replace your whole security configuration with this snippet. Keep CSRF behavior for your existing application and ensure the Razorpay webhook POST can be received without a browser CSRF token. If CSRF is enabled, exclude only the machine-to-machine webhook endpoint using your project's existing Spring Security version/configuration.
