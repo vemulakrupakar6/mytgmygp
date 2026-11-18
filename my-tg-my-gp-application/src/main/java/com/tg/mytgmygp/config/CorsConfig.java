@@ -16,7 +16,7 @@ public class CorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:4200",
-                "https://dawn-remainder-restoration-industry.trycloudflare.com" // Update when your Cloudflare tunnel URL changes
+                "https://football-honey-expenses-rrp.trycloudflare.com" // Update when your Cloudflare tunnel URL changes
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));

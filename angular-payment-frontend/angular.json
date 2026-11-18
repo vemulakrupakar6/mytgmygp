@@ -36,7 +36,7 @@
   "builder": "@angular/build:dev-server",
   "options": {
     "allowedHosts": [
-      "dawn-remainder-restoration-industry.trycloudflare.com"
+      "football-honey-expenses-rrp.trycloudflare.com"
     ]
   },
   "configurations": {
